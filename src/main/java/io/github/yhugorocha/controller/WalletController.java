@@ -29,7 +29,7 @@ public class WalletController {
 
         return this.chatClient.prompt(promptTemplate.create(
                 ToolCallingChatOptions.builder()
-                        .toolNames("numberOfShares", "latestStockPrices")
+                        .toolNames("numberOfShares", "lastedStockPrice")
                         .build()
         )).call().content();
     }
