@@ -9,6 +9,7 @@ import org.springframework.ai.model.tool.ToolCallingChatOptions;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 
 @RestController
 @RequestMapping("/ai")
@@ -43,7 +44,7 @@ public class WalletController {
 
     //Chamada a tools dinâmicas
     @GetMapping("/with-tools")
-    public String calculateWalletValueWithTools() {
+    public Flux<String> calculateWalletValueWithTools() {
         var promptTemplate = new PromptTemplate("""
                     What’s the current value in dollars of my wallet based on the latest stock daily prices?
                 To improve readability, add tables and line breaks when deemed necessary.
@@ -52,7 +53,7 @@ public class WalletController {
         return this.chatClient
                 .prompt(promptTemplate.create())
                 .tools(shareTools, stockTools)
-                .call()
+                .stream()
                 .content();
     }
 }
