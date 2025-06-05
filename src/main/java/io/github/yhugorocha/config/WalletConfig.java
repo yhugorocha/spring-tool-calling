@@ -7,6 +7,8 @@ import io.github.yhugorocha.dto.StockRequest;
 import io.github.yhugorocha.dto.StockResponse;
 import io.github.yhugorocha.repository.ShareRepository;
 import io.github.yhugorocha.services.ShareService;
+import io.github.yhugorocha.tools.ShareTools;
+import io.github.yhugorocha.tools.StockTools;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Description;
@@ -17,6 +19,7 @@ import java.util.function.Supplier;
 @Configuration
 public class WalletConfig {
 
+    //Tools estáticas
     @Bean
     @Description("Number of shares for each company in my portfolio")
     public Supplier<ShareResponse> numberOfShares(ShareRepository shareRepository){
@@ -35,5 +38,16 @@ public class WalletConfig {
             DailyStockData dailyStockData = stock.getValues().getFirst();
             return new StockResponse(Float.parseFloat(dailyStockData.getClose()));
         };
+    }
+
+    //Tools Dinâmicas
+    @Bean
+    public ShareTools shareTools(ShareRepository shareRepository){
+        return new ShareTools(shareRepository);
+    }
+
+    @Bean
+    public StockTools stockTools(TwelveClient twelveClient){
+        return new StockTools(twelveClient);
     }
 }
