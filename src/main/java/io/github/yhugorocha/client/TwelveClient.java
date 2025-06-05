@@ -28,4 +28,13 @@ public class TwelveClient {
                 .block();
     }
 
+    public StockData getStock(int days, String company){
+        return webClient.get()
+                .uri("?apikey={apiKey}&interval=1day&symbol={company}&outputsize={days}&format=JSON", apiKey, company, days)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(StockData.class)
+                .block();
+    }
+
 }
